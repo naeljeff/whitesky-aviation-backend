@@ -128,17 +128,18 @@ const userController = {
 
       const { rows } = await pool.query(deleteUser, [userId]);
 
-      if (rows.length === 0)
-        return res
-          .status(200)
-          .json({
-            statusCode: 200,
-            message: "User has been deleted successfully",
-          });
+      if (rows.length === 0) {
+        return res.status(404).json({
+          statusCode: 404,
+          message: "User not found",
+        });
+      }
 
-      return res
-        .status(404)
-        .json({ statusCode: 404, message: "User not found" });
+      return res.status(200).json({
+        statusCode: 200,
+        message: "User has been deleted successfully",
+        data: rows[0],
+      });
     } catch (error) {
       res.status(400).json({ statusCode: 400, message: error.message });
     }
