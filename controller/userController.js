@@ -62,24 +62,33 @@ const userController = {
   },
   updateUserById: async (req, res) => {
     try {
+      const userId = req.params.user_id;
       const { name, email, phone_number, password } = req.body;
 
       const hashed_password = await bcrypt.hash(password, saltRounds);
 
       const query =
-        "UPDATE users SET name = $1, email = $2, phone_number = $3, password = $4 RETURNING *";
+        "UPDATE users SET name = $1, email = $2, phone_number = $3, password = $4 WHERE user_id = $5 RETURNING *";
 
       const { rows } = await pool.query(query, [
         name,
         email,
         phone_number,
         hashed_password,
+        userId,
       ]);
 
-      res.status(204).json({
-        statusCode: 204,
+      if (rows.length === 0) {
+        return res.status(404).json({
+          statusCode: 404,
+          message: "User not found",
+        });
+      }
+
+      res.status(200).json({
+        statusCode: 200,
         message: "User updated successfully",
-        data: rows,
+        data: rows[0],
       });
     } catch (error) {
       res.status(400).json({ statusCode: 400, message: error.message });
