@@ -130,6 +130,24 @@ const userController = {
       res.status(400).json({ statusCode: 400, message: error.message });
     }
   },
+  userLogout: async (req, res) => {
+    try {
+      const { user_id } = req.body;
+
+      // Update status user ke not logged in
+      const updateUserStatus =
+        "UPDATE users SET status = 'not logged in' WHERE user_id = $1 RETURNING *";
+      const updatedUser = await pool.query(updateUserStatus, [user_id]);
+
+      res.status(200).json({
+        statusCode: 200,
+        message: "User logged out successfully",
+        data: updatedUser.rows[0],
+      });
+    } catch (error) {
+      res.status(400).json({ statusCode: 400, message: error.message });
+    }
+  },
   deleteUserById: async (req, res) => {
     try {
       const userId = req.params.user_id;
