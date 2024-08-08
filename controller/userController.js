@@ -37,7 +37,7 @@ const userController = {
   },
   createUser: async (req, res) => {
     try {
-      const { name, email, phoneNumber, password } = req.body;
+      const { name, email, phone_number, password } = req.body;
 
       const hashed_password = await bcrypt.hash(password, saltRounds);
 
@@ -47,7 +47,7 @@ const userController = {
       const { rows } = await pool.query(query, [
         name,
         email,
-        phoneNumber,
+        phone_number,
         hashed_password,
       ]);
 
@@ -62,7 +62,7 @@ const userController = {
   },
   updateUserById: async (req, res) => {
     try {
-      const { name, email, phoneNumber, password } = req.body;
+      const { name, email, phone_number, password } = req.body;
 
       const hashed_password = await bcrypt.hash(password, saltRounds);
 
@@ -72,7 +72,7 @@ const userController = {
       const { rows } = await pool.query(query, [
         name,
         email,
-        phoneNumber,
+        phone_number,
         hashed_password,
       ]);
 
