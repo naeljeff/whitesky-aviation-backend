@@ -4,7 +4,7 @@ require("dotenv").config();
 const authenticate = require("./middleware/authenticate.js");
 
 const app = express();
-app.arguments(express.json());
+app.use(express.json());
 
 // Set up PostgreSQL client
 const pool = new Pool({
