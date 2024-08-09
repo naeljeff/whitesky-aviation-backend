@@ -100,25 +100,30 @@ const userController = {
 
       // Query to authenticate user
       const authUser = "SELECT * FROM users WHERE email = $1";
+      console.log("Executing Query:", authUser, [email]);
       const { rows } = await pool.query(authUser, [email]);
 
-      if (rows.length === 0)
+      if (rows.length === 0) {
         return res
           .status(401)
           .json({ statusCode: 401, message: "Invalid email or password" });
+      }
 
       const user = rows[0];
       const matchPassword = await bcrypt.compare(password, user.password);
 
-      // Kalau salah password
-      if (!matchPassword)
+      if (!matchPassword) {
         return res
           .status(401)
           .json({ statusCode: 401, message: "Invalid email or password" });
+      }
 
-      // Kalau bener update status jadi logged in
+      // Update user status
       const updateUserStatus =
         "UPDATE users SET status = 'logged in' WHERE user_id = $1 RETURNING *";
+      console.log("Updating User Status Query:", updateUserStatus, [
+        user.user_id,
+      ]);
       const updatedUser = await pool.query(updateUserStatus, [user.user_id]);
 
       res.status(200).json({
@@ -127,6 +132,7 @@ const userController = {
         data: updatedUser.rows[0],
       });
     } catch (error) {
+      // Log the error
       res.status(400).json({ statusCode: 400, message: error.message });
     }
   },

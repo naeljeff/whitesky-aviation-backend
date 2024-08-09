@@ -16,9 +16,7 @@ app.use(express.json());
 
 app.use("/api/v1/users", authenticate, userRoutes);
 
-// app.use("/api/v1", userRoutes);
-
-const port = process.env.PORT || 5000;
+const port = process.env.PORT || 3030;
 app.listen(port, () => {
   console.log(`Server is running on port ${port}`);
 });
