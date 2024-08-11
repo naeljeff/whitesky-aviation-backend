@@ -1,6 +1,7 @@
 const express = require("express");
 const cors = require("cors"); 
 const userRoutes = require("./route/usersRoute.js");
+const newsRoutes = require("./route/newsRoute.js");
 const authenticate = require("./middleware/authenticate.js");
 require("dotenv").config();
 
@@ -15,6 +16,7 @@ app.use(cors({
 app.use(express.json());
 
 app.use("/api/v1/users", authenticate, userRoutes);
+app.use("/api/v1/news", newsRoutes)
 
 const port = process.env.PORT || 3030;
 app.listen(port, () => {
