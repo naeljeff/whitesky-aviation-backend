@@ -3,6 +3,6 @@ const router = express.Router()
 
 const newsController = require("../controller/newsController.js")
 
-router.post("/:category", newsController.getNews)
+router.get("/:category", newsController.getNews)
 
 module.exports = router
